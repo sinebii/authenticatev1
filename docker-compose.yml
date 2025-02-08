@@ -6,29 +6,13 @@ services:
     build:
       context: .
     container_name: auth
-    depends_on:
-      - db
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=12345
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/auth?useSSL=false&serverTimezone=UTC
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=12345
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/auth?useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=sinebi
+      - SPRING_DATASOURCE_PASSWORD=password$$##
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     ports:
       - "7070:7070"
-    networks:
-      - my-network
-
-  db:
-    image: postgres
-    container_name: postgres-auth
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=12345
-      - POSTGRES_DB=auth
-    ports:
-      - "5433:5432"
     networks:
       - my-network
 
