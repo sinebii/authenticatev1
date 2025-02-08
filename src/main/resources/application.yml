@@ -1,0 +1,43 @@
+server:
+  port: 7070
+spring:
+  datasource:
+    url: jdbc:postgresql://172.20.10.2:5432/authenticatev1?useSSL=false&serverTimezone=UTC
+    username: sinebi
+    password: password$$##
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: false
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: sinebi.innazo@gmail.com
+    password: gglftoikeqylurxl
+    default-encoding: UTF-8
+    properties:
+      mail:
+        mime:
+          charset: UTF-8
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+application:
+  title: authentication
+  version: 1.0
+  description: Spring Security Authentication
+
+app:
+  jwtSecret: a47a8d4af8c8ebc1fa3ad560cc9621dc8372a0be5fd5ed3261238b041f8a1cdc
+  jwt-expiration-millisecons: 86400000
+
+
