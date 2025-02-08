@@ -1,32 +1,13 @@
-version: '3.8'
-
 services:
   app:
-    image: 'authentication:latest'
+    image: authentication:latest
     build:
       context: .
-    container_name: auth
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://172.20.10.2:5432/authenticationv1?useSSL=false&serverTimezone=UTC
-      - SPRING_DATASOURCE_USERNAME=sinebi
-      - SPRING_DATASOURCE_PASSWORD=password$$##
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      dockerfile: Dockerfile
     ports:
       - "7070:7070"
-    networks:
-      - my-network
-
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: pgadmin-auth
     environment:
-      - PGADMIN_DEFAULT_EMAIL=sinebii37@gmail.com
-      - PGADMIN_DEFAULT_PASSWORD=12345
-    ports:
-      - "7079:80"
-    networks:
-      - my-network
-
-networks:
-  my-network:
-    driver: bridge
+      SPRING_DATASOURCE_URL: jdbc:postgresql://172.20.10.6:5432/authenticatev1
+      SPRING_DATASOURCE_USERNAME: sinebi
+      SPRING_DATASOURCE_PASSWORD: admin112
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
