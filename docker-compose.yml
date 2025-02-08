@@ -7,7 +7,7 @@ services:
       context: .
     container_name: auth
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://172.20.10.4:5432/authenticationv1?useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://172.20.10.2:5432/authenticationv1?useSSL=false&serverTimezone=UTC
       - SPRING_DATASOURCE_USERNAME=sinebi
       - SPRING_DATASOURCE_PASSWORD=password$$##
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
