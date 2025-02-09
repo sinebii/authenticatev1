@@ -1,19 +1,23 @@
 package com.authentication.controller;
 
+import com.authentication.payload.CreateTaskDto;
+import com.authentication.service.TodoService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/todo")
+@RequiredArgsConstructor
 public class TodoController {
+    private final TodoService todoService;
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
-    public String sayHello(){
-        return "POST Hello World";
+    public ResponseEntity<?> createTask(@RequestBody CreateTaskDto createTaskDto){
+        return new ResponseEntity<>(todoService.createTask(createTaskDto), HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")

@@ -37,6 +37,7 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests((authorize)->{
                     authorize.requestMatchers(
                             "/api/v1/auth/**",
+                            "/api/v1/todo/**",
                             "/v2/api-docs",
                             "/v3/api-docs",
                             "/v3/api-docs/**",
@@ -52,6 +53,7 @@ public class SpringSecurityConfig {
                                 .and()
                                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
                     } catch (Exception e) {
+                        System.err.println(e.getMessage());
                         throw new RuntimeException(e);
                     }
                 }).httpBasic(Customizer.withDefaults());
