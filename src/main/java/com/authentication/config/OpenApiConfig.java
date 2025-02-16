@@ -25,10 +25,6 @@ servers = {
         @Server(
                 description = "DEVELOPMENT ENV",
                 url = "http://localhost:9090"
-            ),
-        @Server(
-                description = "PRODUCTION ENV",
-                url = "http://localhost:9096"
             )
     },
 security = {
