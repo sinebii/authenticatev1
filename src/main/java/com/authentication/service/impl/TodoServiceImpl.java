@@ -34,7 +34,12 @@ public class TodoServiceImpl implements TodoService {
                 .build();
         Todo savedTodo = todoRepository.save(todo);
         return Stream.of(savedTodo)
-                .map(t -> new CreateTaskDto(t.getId(), t.getTitle(), t.getDescription(), t.isCompleted(), t.getCreatedAt()))
+                .map(t -> new CreateTaskDto(
+                        t.getId(),
+                        t.getTitle(),
+                        t.getDescription(),
+                        t.isCompleted(),
+                        t.getCreatedAt()))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Failed to map Todo to DTO"));
     }

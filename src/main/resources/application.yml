@@ -2,7 +2,7 @@ server:
   port: 7070
 spring:
   datasource:
-    url: jdbc:postgresql://172.20.10.6:5432/authenticatev1?useSSL=false&serverTimezone=UTC
+    url: jdbc:postgresql://172.20.10.2:5432/authenticatev1?useSSL=false&serverTimezone=UTC
     username: sinebi
     password: admin112
     driver-class-name: org.postgresql.Driver
