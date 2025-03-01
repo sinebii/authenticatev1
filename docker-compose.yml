@@ -1,13 +1,29 @@
+version: '3.8'
+
 services:
   app:
-    image: authentication:latest
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: sinebi/authentication_app:latest
+    container_name: authentication_app
+    restart: always
     ports:
       - "7070:7070"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://172.20.10.6:5432/authenticatev1
-      SPRING_DATASOURCE_USERNAME: sinebi
-      SPRING_DATASOURCE_PASSWORD: admin112
-      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://67.217.58.16:5432/authentication
+      - SPRING_DATASOURCE_USERNAME=sinebi
+      - SPRING_DATASOURCE_PASSWORD=12345##@@
+
+
+
+#services:
+#  app:
+#    image: authentication:latest
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - "7070:7070"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://67.217.58.16:5432/authenticatev1
+#      SPRING_DATASOURCE_USERNAME: sinebi
+#      SPRING_DATASOURCE_PASSWORD: 12345##@@
+#      SPRING_JPA_HIBERNATE_DDL_AUTO: update
