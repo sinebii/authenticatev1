@@ -10,6 +10,6 @@ public class EmailUtils {
     public static String getAccountVerificationMail(String name, String to, String amount){
         amount = Long.valueOf(amount).toString();
         Integer rates = Integer.valueOf(amount);
-        return "Hello "+name+ ",\n\n Your account has been credited with with  \n\n" + rates + "\n\n Panteka Support Team";
+        return "Hello "+name+ ",\n\n Your  account has been credited with with  \n\n" + rates + "\n\n Panteka Support Team";
     }
 }
