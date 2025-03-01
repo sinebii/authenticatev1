@@ -10,7 +10,6 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 git branch: 'main', url: 'https://github.com/sinebii/authenticatev1'
-
             }
         }
         stage('Build JAR') {
@@ -26,27 +25,25 @@ pipeline {
         stage('Push to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh "docker login -u $DOCKER_USER -p $DOCKER_PASS"
+                    sh """
+                    docker login -u $DOCKER_USER -p $DOCKER_PASS
+                    docker push $DOCKER_IMAGE
+                    """
                 }
             }
         }
         stage('Deploy to Server') {
             steps {
-               steps {
-                   sshagent(['server-ssh-credentials']) {
-                       sh """
-                       ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
-                       docker pull $DOCKER_IMAGE
-                       docker stop $CONTAINER_NAME || true
-                       docker rm $CONTAINER_NAME || true
-                       docker run -d --name $CONTAINER_NAME -p 7070:7070 $DOCKER_IMAGE
-                       EOF
-                       """
-                   }
-               }
-
-
-
+                sshagent(['server-ssh-credentials']) {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
+                    docker pull $DOCKER_IMAGE
+                    docker stop $CONTAINER_NAME || true
+                    docker rm $CONTAINER_NAME || true
+                    docker run -d --restart=always --name $CONTAINER_NAME -p 7070:7070 $DOCKER_IMAGE
+                    EOF
+                    """
+                }
             }
         }
     }
