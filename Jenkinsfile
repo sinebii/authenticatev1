@@ -32,16 +32,17 @@ pipeline {
         }
         stage('Deploy to Server') {
             steps {
-                sshagent(['server-ssh-credentials']) {
-                    sh """
-                    ssh -i /var/lib/jenkins/.ssh/id_rsa $SERVER_USER@$SERVER_IP << EOF
-                    docker pull $DOCKER_IMAGE
-                    docker stop $CONTAINER_NAME || true
-                    docker rm $CONTAINER_NAME || true
-                    docker run -d --name $CONTAINER_NAME -p 7070:7070 $DOCKER_IMAGE
-                    EOF
-                    """
-                }
+               sshagent(['server-ssh-credentials']) {
+                   sh """
+                   ssh -i ~/.ssh/id_rsa $SERVER_USER@$SERVER_IP << EOF
+                   docker pull $DOCKER_IMAGE
+                   docker stop $CONTAINER_NAME || true
+                   docker rm $CONTAINER_NAME || true
+                   docker run -d --name $CONTAINER_NAME -p 7070:7070 $DOCKER_IMAGE
+                   EOF
+                   """
+               }
+
 
             }
         }
