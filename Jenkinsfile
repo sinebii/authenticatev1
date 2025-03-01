@@ -9,7 +9,8 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/sinebii/authenticatev1'
+                git branch: 'main', url: 'git@github.com:sinebii/authenticatev1.git'
+
             }
         }
         stage('Build JAR') {
