@@ -1,50 +1,47 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE = 'sinebi/authentication_app:latest'
-        CONTAINER_NAME = 'authentication_app'
-        SERVER_IP = '67.217.58.16'
-        SERVER_USER = 'sinebi'
+        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials') // ID from Step 3
+        IMAGE_NAME = 'sinebi/authentication_app' // Replace with your Docker Hub repo
     }
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/sinebii/authenticatev1'
+                git url: 'https://github.com/sinebii/authenticatev1', branch: 'main'
             }
         }
         stage('Build JAR') {
             steps {
-                sh './mvnw clean package -DskipTests'
+                sh 'mvn clean package'
             }
         }
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t $DOCKER_IMAGE ."
+                sh 'docker build -t ${IMAGE_NAME}:latest .'
             }
         }
         stage('Push to Docker Hub') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh """
-                    docker login -u $DOCKER_USER -p $DOCKER_PASS
-                    docker push $DOCKER_IMAGE
-                    """
-                }
+                sh 'echo $DOCKER_HUB_CREDENTIALS_PSW | docker login -u $DOCKER_HUB_CREDENTIALS_USR --password-stdin'
+                sh 'docker push ${IMAGE_NAME}:latest'
             }
         }
         stage('Deploy to Server') {
             steps {
-                sshagent(['server-ssh-credentials']) {
-                    sh """
-                    ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP << EOF
-                    docker pull $DOCKER_IMAGE
-                    docker stop $CONTAINER_NAME || true
-                    docker rm $CONTAINER_NAME || true
-                    docker run -d --restart=always --name $CONTAINER_NAME -p 7070:7070 $DOCKER_IMAGE
-                    EOF
-                    """
+                script {
+                    // Stop and remove existing container (if any)
+                    sh 'docker stop authentication || true'
+                    sh 'docker rm authentication || true'
+                    // Pull and run the new image
+                    sh 'docker pull ${IMAGE_NAME}:latest'
+                    sh 'docker run -d --name authentication -p 7070:7070 ${IMAGE_NAME}:latest'
                 }
             }
+        }
+    }
+    post {
+        always {
+            sh 'docker logout'
         }
     }
 }
