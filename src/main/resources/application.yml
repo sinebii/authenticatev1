@@ -2,9 +2,9 @@ server:
   port: 7070
 spring:
   datasource:
-    url: jdbc:postgresql://67.217.58.16:5432/authentication?useSSL=false&serverTimezone=UTC
-    username: sinebi
-    password: 12345##@@
+    url: jdbc:postgresql://${DB_HOST}:26654/{DB_NAME}?ssl=require
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -40,4 +40,3 @@ app:
   jwtSecret: a47a8d4af8c8ebc1fa3ad560cc9621dc8372a0be5fd5ed3261238b041f8a1cdc
   jwt-expiration-millisecons: 86400000
 
-##67.217.58.16
