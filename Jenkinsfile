@@ -1,12 +1,8 @@
 pipeline {
     agent any
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
-        IMAGE_NAME = 'sinebi/authentication_app'
-        DB_HOST = credentials('DB_HOST')
-        DB_NAME = credentials('DB_NAME')
-        DB_USERNAME = credentials('DB_USERNAME')
-        DB_PASSWORD = credentials('DB_PASSWORD')
+        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials') // ID from Step 3
+        IMAGE_NAME = 'sinebi/authentication_app' // Replace with your Docker Hub repo
     }
     stages {
         stage('Checkout') {
@@ -21,7 +17,7 @@ pipeline {
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build --build-arg DB_HOST=${DB_HOST} --build-arg DB_NAME=${DB_NAME} --build-arg DB_USERNAME=${DB_USERNAME} --build-arg DB_PASSWORD=${DB_PASSWORD} -t ${IMAGE_NAME}:latest .'
+                sh 'docker build -t ${IMAGE_NAME}:latest .'
             }
         }
         stage('Push to Docker Hub') {
@@ -36,17 +32,9 @@ pipeline {
                     // Stop and remove existing container (if any)
                     sh 'docker stop authentication || true'
                     sh 'docker rm authentication || true'
-
                     // Pull and run the new image
                     sh 'docker pull ${IMAGE_NAME}:latest'
-                    sh """
-                        docker run -d --name authentication -p 7070:7070 \
-                        -e DB_HOST=${DB_HOST} \
-                        -e DB_NAME=${DB_NAME} \
-                        -e DB_USERNAME=${DB_USERNAME} \
-                        -e DB_PASSWORD=${DB_PASSWORD} \
-                        ${IMAGE_NAME}:latest
-                    """
+                    sh 'docker run -d --name authentication -p 7070:7070 ${IMAGE_NAME}:latest'
                 }
             }
         }

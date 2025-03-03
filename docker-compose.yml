@@ -8,9 +8,9 @@ services:
     ports:
       - "7070:7070"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://${DB_HOST}:26654/{DB_NAME}?ssl=require
-      - SPRING_DATASOURCE_USERNAME=${DB_USERNAME}
-      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://67.217.58.16:5432/agroconnect?ssl=require
+      - SPRING_DATASOURCE_USERNAME=sinnazo
+      - SPRING_DATASOURCE_PASSWORD=12345##$$
 
 
 
