@@ -29,14 +29,20 @@ pipeline {
         stage('Deploy to Server') {
             steps {
                 script {
-                    // Stop and remove existing container (if any)
-                    sh 'docker stop authentication || true'
-                    sh 'docker rm authentication || true'
-                    // Pull and run the new image
+                    // Navigate to the directory containing docker-compose.yml
+                    sh 'cd $WORKSPACE'
+
+                    // Stop and remove existing containers
+                    sh 'docker-compose down || true'
+
+                    // Pull the latest image
                     sh 'docker pull ${IMAGE_NAME}:latest'
-                    sh 'docker run -d --name authentication -p 7070:7070 ${IMAGE_NAME}:latest'
+
+                    // Start all services (app, db, pgadmin)
+                    sh 'docker-compose up -d'
                 }
             }
+
         }
     }
     post {
