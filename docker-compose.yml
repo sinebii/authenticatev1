@@ -1,6 +1,31 @@
 version: '3.8'
 
 services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: authentication_db
+      POSTGRES_USER: sinebi
+      POSTGRES_PASSWORD: 12345##
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: sinebii37@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
   app:
     image: sinebi/authentication_app:latest
     container_name: authentication_app
@@ -8,22 +33,11 @@ services:
     ports:
       - "7070:7070"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://67.217.58.16:5432/agroconnect?ssl=require
-      - SPRING_DATASOURCE_USERNAME=sinnazo
-      - SPRING_DATASOURCE_PASSWORD=12345##$$
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/authentication_db
+      - SPRING_DATASOURCE_USERNAME=sinebi
+      - SPRING_DATASOURCE_PASSWORD=12345##
+    depends_on:
+      - db
 
-
-
-#services:
-#  app:
-#    image: authentication:latest
-#    build:
-#      context: .
-#      dockerfile: Dockerfile
-#    ports:
-#      - "7070:7070"
-#    environment:
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://67.217.58.16:5432/authenticatev1
-#      SPRING_DATASOURCE_USERNAME: sinebi
-#      SPRING_DATASOURCE_PASSWORD: 12345##@@
-#      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+volumes:
+  pgdata:
