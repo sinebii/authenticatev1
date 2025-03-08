@@ -6,7 +6,7 @@ services:
     container_name: authentication_app
     restart: always
     ports:
-      - "7070:7070"
+      - "7071:7071"
     environment:
       - SPRING_DATASOURCE_URL=${DB_URL}
       - SPRING_DATASOURCE_USERNAME=${DB_CREDENTIALS_USR}
