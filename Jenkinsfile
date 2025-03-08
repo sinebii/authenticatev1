@@ -53,5 +53,23 @@ pipeline {
         always {
             sh 'docker logout'
         }
+        success {
+            emailext(
+                subject: "Jenkins Build SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """<p>Build <b>#${env.BUILD_NUMBER}</b> of job <b>${env.JOB_NAME}</b> was successful.</p>
+                         <p>Check it out: <a href="${env.BUILD_URL}">${env.BUILD_URL}</a></p>""",
+                to: 'sinebii37@gmail.com',
+                mimeType: 'text/html'
+            )
+        }
+        failure {
+            emailext(
+                subject: "Jenkins Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """<p>Build <b>#${env.BUILD_NUMBER}</b> of job <b>${env.JOB_NAME}</b> has failed.</p>
+                         <p>Check the logs: <a href="${env.BUILD_URL}console">${env.BUILD_URL}console</a></p>""",
+                to: 'sinebii37@gmail.com',
+                mimeType: 'text/html'
+            )
+        }
     }
 }
