@@ -24,7 +24,7 @@ info = @Info(
 servers = {
         @Server(
                 description = "DEVELOPMENT ENV",
-                url = "http://localhost:9090"
+                url = "http://67.217.58.16:7070"
             )
     },
 security = {
