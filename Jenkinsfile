@@ -34,8 +34,9 @@ pipeline {
         stage('Deploy to Server') {
             steps {
                 script {
-                    def port = (env.GIT_BRANCH == 'origin/main') ? '7071' : '7070'
-                    def profile = (env.GIT_BRANCH == 'origin/main') ? 'prod' : 'dev'
+                    def branch = env.GIT_BRANCH.replaceAll('origin/', '')
+                    def port = (branch == 'main') ? '7071' : '7070'
+                    def profile = (branch == 'main') ? 'prod' : 'dev'
                     sh 'docker stop authentication || true'
                     sh 'docker rm authentication || true'
                     sh 'docker pull ${IMAGE_NAME}:latest'
