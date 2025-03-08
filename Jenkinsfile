@@ -1,8 +1,12 @@
 pipeline {
     agent any
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials') // ID from Step 3
-        IMAGE_NAME = 'sinebi/authentication_app' // Replace with your Docker Hub repo
+        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
+        IMAGE_NAME = 'sinebi/authentication_app'
+
+        // Fetch DB credentials from Jenkins
+        DB_URL = credentials('DB_URL')
+        DB_CREDENTIALS = credentials('DB_CREDENTIALS')
     }
     stages {
         stage('Checkout') {
@@ -29,12 +33,16 @@ pipeline {
         stage('Deploy to Server') {
             steps {
                 script {
-                    // Stop and remove existing container (if any)
                     sh 'docker stop authentication || true'
                     sh 'docker rm authentication || true'
-                    // Pull and run the new image
                     sh 'docker pull ${IMAGE_NAME}:latest'
-                    sh 'docker run -d --name authentication -p 7070:7070 ${IMAGE_NAME}:latest'
+
+                    sh '''docker run -d --name authentication \
+                        -p 7070:7070 \
+                        -e SPRING_DATASOURCE_URL="$DB_URL" \
+                        -e SPRING_DATASOURCE_USERNAME="$DB_CREDENTIALS_USR" \
+                        -e SPRING_DATASOURCE_PASSWORD="$DB_CREDENTIALS_PSW" \
+                        ${IMAGE_NAME}:latest'''
                 }
             }
         }

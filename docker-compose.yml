@@ -8,6 +8,6 @@ services:
     ports:
       - "7070:7070"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:mysql://66.45.225.237:3306/mydatabase?ssl=require
-      - SPRING_DATASOURCE_USERNAME=sinebi
-      - SPRING_DATASOURCE_PASSWORD=PassWord@34
+      - SPRING_DATASOURCE_URL=${DB_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_CREDENTIALS_USR}
+      - SPRING_DATASOURCE_PASSWORD=${DB_CREDENTIALS_PSW}
