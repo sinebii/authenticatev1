@@ -74,7 +74,7 @@ public class AuthenticationImpl implements AuthenticationService {
             roles.add(role);
             user.setRoles(roles);
             User saved = userRepository.save(user);
-            publisher.publishEvent(new RegistrationCompleteEvent(saved, "http://67.217.58.16:7070"));
+            publisher.publishEvent(new RegistrationCompleteEvent(saved, "http://67.217.58.16:7071"));
             return GlobalResponse.builder()
                     .data(userPayload)
                     .status(HttpStatus.CREATED)

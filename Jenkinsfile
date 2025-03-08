@@ -39,7 +39,7 @@ pipeline {
                     sh 'docker pull ${IMAGE_NAME}:latest'
 
                     sh '''docker run -d --name authentication \
-                        -p 7070:7070 \
+                        -p 7071:7071 \
                         -e SPRING_PROFILES_ACTIVE=prod \
                         -e SPRING_DATASOURCE_URL="$DB_URL" \
                         -e SPRING_DATASOURCE_USERNAME="$DB_CREDENTIALS_USR" \
