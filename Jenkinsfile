@@ -34,16 +34,13 @@ pipeline {
         stage('Deploy to Server') {
             steps {
                 script {
-                    def branch = env.GIT_BRANCH.replaceAll('origin/', '')
-                    def port = (branch == 'main') ? '7071' : '7070'
-                    def profile = (branch == 'main') ? 'prod' : 'dev'
                     sh 'docker stop authentication || true'
                     sh 'docker rm authentication || true'
                     sh 'docker pull ${IMAGE_NAME}:latest'
 
                     sh '''docker run -d --name authentication \
-                        -p ${port}:${port} \
-                        -e SPRING_PROFILES_ACTIVE={profile} \
+                        -p 7071:7071 \
+                        -e SPRING_PROFILES_ACTIVE=prod \
                         -e SPRING_DATASOURCE_URL="$DB_URL" \
                         -e SPRING_DATASOURCE_USERNAME="$DB_CREDENTIALS_USR" \
                         -e SPRING_DATASOURCE_PASSWORD="$DB_CREDENTIALS_PSW" \
