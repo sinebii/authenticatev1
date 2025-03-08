@@ -3,6 +3,7 @@ pipeline {
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
         IMAGE_NAME = 'sinebi/authentication_app'
+        SPRING_PROFILES_ACTIVE = 'prod'
 
         // Fetch DB credentials from Jenkins
         DB_URL = credentials('DB_URL')
@@ -16,7 +17,7 @@ pipeline {
         }
         stage('Build JAR') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean package -Dspring.profiles.active=prod'
             }
         }
         stage('Build Docker Image') {
@@ -39,6 +40,7 @@ pipeline {
 
                     sh '''docker run -d --name authentication \
                         -p 7070:7070 \
+                        -e SPRING_PROFILES_ACTIVE=prod \
                         -e SPRING_DATASOURCE_URL="$DB_URL" \
                         -e SPRING_DATASOURCE_USERNAME="$DB_CREDENTIALS_USR" \
                         -e SPRING_DATASOURCE_PASSWORD="$DB_CREDENTIALS_PSW" \
